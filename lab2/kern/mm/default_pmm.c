@@ -9,7 +9,6 @@
    usually split, and the remainder added to the list as another free block.
    Please see Page 196~198, Section 8.2 of Yan Wei Ming's chinese book "Data Structure -- C programming language"
 */
-
 // LAB2 EXERCISE 1: YOUR CODE
 // you should rewrite functions: default_init,default_init_memmap,default_alloc_pages, default_free_pages.
 /*
@@ -76,10 +75,10 @@ default_init_memmap(struct Page *base, size_t n) {
         SetPageProperty(p);
         p->property = 0;
         set_page_ref(p, 0);
-
         list_add_before(&free_list, &(p->page_link));
     }
     nr_free += n;
+    //first block
     base->property = n;
 }
 
@@ -90,7 +89,7 @@ default_alloc_pages(size_t n) {
         return NULL;
     }
 
-    //struct Page *page = NULL;
+    //struct Page *p = NULL;
     list_entry_t *le, *len;
     le = &free_list;
 
@@ -125,25 +124,28 @@ default_free_pages(struct Page *base, size_t n) {
     assert(PageReserved(base));
     assert(n > 0);
 
-    struct Page *p = base;
     list_entry_t *le = &free_list;
+    struct Page * p;
 
-    while((le=list_next(le)) != &free_list && p<=base) {
+    while((le=list_next(le)) != &free_list) {
       p = le2page(le, page_link);
+      if(p>base){
+        break;
+      }
     }
 
-    for (p=base; p != base + n; p ++) {
-        assert(!PageReserved(p) && !PageProperty(p));
-        p->flags = 0;
-        set_page_ref(p, 0);
+    for(p=base; p != base+n; p++){
+        //assert(!PageReserved(p) && !PageProperty(p));
+        //p->flags = 0;
+        //set_page_ref(p, 0);
         list_add_before(le, &(p->page_link));
     }
     base->flags = 0;
     set_page_ref(base, 0);
     ClearPageProperty(base);
 
-    base->property = n;
     SetPageProperty(base);
+    base->property = n;
 
     p = le2page(le,page_link) ;
     if( base+n == p ){
@@ -167,6 +169,7 @@ default_free_pages(struct Page *base, size_t n) {
     }
 
     nr_free += n;
+
 }
 
 static size_t
