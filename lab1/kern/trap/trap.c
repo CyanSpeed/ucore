@@ -46,11 +46,11 @@ idt_init(void) {
       *     You don't know the meaning of this instruction? just google it! and check the libs/x86.h to know more.
       *     Notice: the argument of lidt is idt_pd. try to find it!
       */
-    
+
     extern uintptr_t __vectors[];
     int i;
     int numberOfGate = sizeof(idt) / sizeof(struct gatedesc);
-    for (i = 0; i < numberOfGate; i ++) {
+    for (i = 0; i < numberOfGate); i ++) {
         SETGATE(idt[i], 0, GD_KTEXT, __vectors[i], DPL_KERNEL);
     }
     lidt(&idt_pd);
