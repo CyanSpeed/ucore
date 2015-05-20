@@ -42,7 +42,7 @@ main(void) {
                         }
                     }
                }
-               
+
           }
           if (pids[i] < 0) {
                goto failed;
@@ -54,7 +54,7 @@ main(void) {
      for (i = 0; i < TOTAL; i ++) {
          status[i]=0;
          waitpid(pids[i],&status[i]);
-         cprintf("main: pid %d, acc %d, time %d\n",pids[i],status[i],gettime_msec()); 
+         cprintf("main: pid %d, acc %d, time %d\n",pids[i],status[i],gettime_msec());
      }
      cprintf("main: wait pids over\n");
      cprintf("stride sched correct result:");
