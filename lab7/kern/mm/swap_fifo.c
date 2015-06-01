@@ -75,7 +75,6 @@ _fifo_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick
      assert(p!=NULL);
      *ptr_page=p;
      return 0;
-     return 0;
 }
 
 static int
